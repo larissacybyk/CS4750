@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class Users {
+public class User {
     @Id
     @Column(name = "user_id")
     private int userId;
@@ -15,9 +15,9 @@ public class Users {
     @Column(name = "email")
     private String email;
 
-    public Users() {}
+    public User() {}
 
-    public Users(int userId, String username, String email) {
+    public User(int userId, String username, String email) {
         this.userId = userId;
         this.username = username;
         this.email = email;
