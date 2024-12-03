@@ -41,11 +41,11 @@ public class PlaylistController {
         }
     }
 
-    @PostMapping("/playlist")
-    public ResponseEntity<Playlist> createPlaylist(@RequestBody Playlist playlist) {
+    @PostMapping("/playlist/{id}")
+    public ResponseEntity<Playlist> createPlaylist(@RequestBody Playlist playlist, @PathVariable("id") int id) {
         try {
-            Playlist newPlaylist = new Playlist(playlist.getPlaylistID(), playlist.getListenerId(), playlist.getPrivacySetting());
-            System.out.println("id: " + playlist.getPlaylistID());
+            Playlist newPlaylist = new Playlist(id, playlist.getListenerId(), playlist.getPrivacySetting());
+
             Playlist _playlist = playlistRepository
                     .save(newPlaylist);
             return new ResponseEntity<>(_playlist, HttpStatus.CREATED);
