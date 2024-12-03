@@ -62,7 +62,7 @@ public class PlaylistController {
             Playlist _playlist= playlistData.get();
             _playlist.setDateCreated(playlist.getDateCreated());
             _playlist.setListenerId(playlist.getListenerId());
-            _playlist.setPlaylistID(playlist.getPlaylistID());
+            _playlist.setPlaylistID(id);
             _playlist.setPrivacySetting(playlist.getPrivacySetting());
 
             return new ResponseEntity<>(playlistRepository.save(_playlist), HttpStatus.OK);
