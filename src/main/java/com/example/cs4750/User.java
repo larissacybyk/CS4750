@@ -6,30 +6,22 @@ import jakarta.persistence.*;
 @Table(name = "users")
 public class User {
     @Id
-    @Column(name = "user_id")
-    private int userId;
-
     @Column(name = "username")
     private String username;
+
+//    @Column(name = "username")
+//    private String username;
 
     @Column(name = "email")
     private String email;
 
     public User() {}
 
-    public User(int userId, String username, String email) {
-        this.userId = userId;
+    public User( String username, String email) {
         this.username = username;
         this.email = email;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 
     public String getUsername() {
         return username;

@@ -33,8 +33,8 @@ public class UserController {
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable("userId") int userId) {
-        Optional<User> userData = userRepository.findById(userId);
+    public ResponseEntity<User> getUserById(@PathVariable("userId") String username) {
+        Optional<User> userData = userRepository.findById(username);
 
         if (userData.isPresent()) {
             return new ResponseEntity<>(userData.get(), HttpStatus.OK);
@@ -43,10 +43,10 @@ public class UserController {
         }
     }
 
-    @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    @PostMapping("/users/{username}")
+    public ResponseEntity<User> createUser(@RequestBody User user, @PathVariable("username") String username) {
         try {
-            User newUser = userRepository.save(new User(user.getUserId(), user.getUsername(), user.getEmail()));
+            User newUser = userRepository.save(new User(username, user.getEmail()));
             return new ResponseEntity<>(newUser, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -54,8 +54,8 @@ public class UserController {
     }
 
     @PutMapping("/users/{userId}")
-    public ResponseEntity<User> updateUser(@PathVariable("userId") int userId, @RequestBody User userDetails) {
-        Optional<User> userData = userRepository.findById(userId);
+    public ResponseEntity<User> updateUser(@PathVariable("userId") String username, @RequestBody User userDetails) {
+        Optional<User> userData = userRepository.findById(username);
 
         if (userData.isPresent()) {
             User existingUser = userData.get();
@@ -70,9 +70,9 @@ public class UserController {
 
     // Delete a user by ID
     @DeleteMapping("/users/{userId}")
-    public ResponseEntity<HttpStatus> deleteUserById(@PathVariable("userId") int userId) {
+    public ResponseEntity<HttpStatus> deleteUserById(@PathVariable("userId") String username) {
         try {
-            userRepository.deleteById(userId);
+            userRepository.deleteById(username);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
