@@ -93,7 +93,7 @@ public class Playlist_SongController {
         }
     }
 
-    @DeleteMapping("/playlist")
+    @DeleteMapping("/playlistsong")
     public ResponseEntity<HttpStatus> deleteAllPlaylist_Songs() { // need to delete all foreign keys to playlist_id, doesn't work yet
         try {
             playlist_SongRepository.deleteAll();
