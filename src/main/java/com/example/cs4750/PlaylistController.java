@@ -19,14 +19,11 @@ public class PlaylistController {
     public ResponseEntity<List<Playlist>> getAllPlaylists() {
         try {
             List<Playlist> playlists = new ArrayList<Playlist>();
-            System.out.println("1");
             playlistRepository.findAll().forEach(playlists::add);
-            System.out.println("2");
 
             if (playlists.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            System.out.println("3");
 
             return new ResponseEntity<>(playlists, HttpStatus.OK);
         } catch (Exception e) {
@@ -42,5 +39,56 @@ public class PlaylistController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping("/playlist")
+    public ResponseEntity<Playlist> createPlaylist(@RequestBody Playlist playlist) {
+        try {
+            Playlist newPlaylist = new Playlist(playlist.getPlaylistID(), playlist.getListenerId(), playlist.getPrivacySetting());
+            System.out.println("id: " + playlist.getPlaylistID());
+            Playlist _playlist = playlistRepository
+                    .save(newPlaylist);
+            return new ResponseEntity<>(_playlist, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/playlist/{id}")
+    public ResponseEntity<Playlist> updatePlaylist(@PathVariable("id") int id, @RequestBody Playlist playlist) {
+        Optional<Playlist> playlistData = playlistRepository.findById(id);
+
+        if (playlistData.isPresent()) {
+            Playlist _playlist= playlistData.get();
+            _playlist.setDateCreated(playlist.getDateCreated());
+            _playlist.setListenerId(playlist.getListenerId());
+            _playlist.setPlaylistID(playlist.getPlaylistID());
+            _playlist.setPrivacySetting(playlist.getPrivacySetting());
+
+            return new ResponseEntity<>(playlistRepository.save(_playlist), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/playlist/{id}")
+    public ResponseEntity<HttpStatus> deletePlaylist(@PathVariable("id") int id) { // need to delete all foreign keys to playlist_id, doesn't work yet
+        try {
+            playlistRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/playlist")
+    public ResponseEntity<HttpStatus> deleteAllPlaylists() { // need to delete all foreign keys to playlist_id, doesn't work yet
+        try {
+            playlistRepository.deleteAll();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }
